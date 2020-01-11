@@ -49,6 +49,11 @@ public class SysUserController {
         return new RestResult<>(string);
     }
 
+    @ApiOperation(value = "测试")
+    @GetMapping("organization/test")
+    public RestResult<String> organizationTest(@RequestParam String account, @RequestParam String password) throws Exception {
+        return new RestResult<>("account:" + account + ";password:" + password);
+    }
 
     @ApiOperation(value = "组织：用户登录，如果登录成功则返回token及相关权限信息")
     @PostMapping("organization/login")
@@ -151,7 +156,7 @@ public class SysUserController {
     })
     @PostMapping("organization/number")
     public RestResult<Integer> setOrganizationMaxUserNumberByOrganizationId(@RequestParam("maxNumber") Integer maxNumber, @RequestParam("organizationId") Integer organizationId,
-                                                                    HttpServletRequest request) throws Exception {
+                                                                            HttpServletRequest request) throws Exception {
         return new RestResult<>(sysUserService.setOrganizationMaxUserNumberByOrganizationId((Integer) request.getAttribute(Constant.ORGANIZATION_ID), maxNumber, organizationId));
     }
 
@@ -180,14 +185,14 @@ public class SysUserController {
     @ApiOperation(value = "admin与组织：通过权限id列表添加角色，如果自身没有该权限则不会添加该权限")
     @PostMapping(value = "/role/add")
     public RestResult<Boolean> addRole(@RequestBody RoleAddReq roleAddReq, HttpServletRequest request) throws Exception {
-        return new RestResult<>(sysRoleService.addRole((Integer) request.getAttribute(Constant.ORGANIZATION_ID), (Integer) request.getAttribute(Constant.USER_ID), roleAddReq.getRoleName(),roleAddReq.getMemo(), roleAddReq.getPermissionIds()));
+        return new RestResult<>(sysRoleService.addRole((Integer) request.getAttribute(Constant.ORGANIZATION_ID), (Integer) request.getAttribute(Constant.USER_ID), roleAddReq.getRoleName(), roleAddReq.getMemo(), roleAddReq.getPermissionIds()));
     }
 
     @RequiresPermissions("角色的编辑")
     @ApiOperation(value = "admin与组织：通过roleId及权限id列表更新角色")
     @PostMapping(value = "/role/edit")
     public RestResult<Boolean> changeRoleByRoleIdAndPermissionIds(@RequestBody RoleEditReq roleEditReq, HttpServletRequest request) throws Exception {
-        return new RestResult<>(sysRoleService.changeRoleByRoleIdAndPermissionIds((Integer) request.getAttribute(Constant.ORGANIZATION_ID), (Integer) request.getAttribute(Constant.USER_ID), roleEditReq.getRoleId(), roleEditReq.getRoleName(),roleEditReq.getMemo(), roleEditReq.getPermissionIds()));
+        return new RestResult<>(sysRoleService.changeRoleByRoleIdAndPermissionIds((Integer) request.getAttribute(Constant.ORGANIZATION_ID), (Integer) request.getAttribute(Constant.USER_ID), roleEditReq.getRoleId(), roleEditReq.getRoleName(), roleEditReq.getMemo(), roleEditReq.getPermissionIds()));
     }
 
     @RequiresPermissions("角色的删除")
@@ -200,7 +205,7 @@ public class SysUserController {
     @RequiresPermissions("创建组织")
     @ApiOperation(value = "admin:创建新的组织")
     @DeleteMapping(value = "organization/create")
-    public RestResult<Boolean> createOrganization(String organizationName,Integer maxNumber,HttpServletRequest request)throws Exception{
+    public RestResult<Boolean> createOrganization(String organizationName, Integer maxNumber, HttpServletRequest request) throws Exception {
         return new RestResult<>(sysUserService.createOrganization((Integer) request.getAttribute(Constant.ORGANIZATION_ID), organizationName, maxNumber));
     }
 }
